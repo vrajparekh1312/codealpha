@@ -1,81 +1,67 @@
-# 🧮 CodeAlpha Calculator
+# 🚀 CodeAlpha Frontend Development Internship
 
-A modern **Web Calculator** built using **HTML, CSS, and JavaScript** as part of the **CodeAlpha Frontend Development Internship**.
-
-This calculator supports both **Standard and Scientific calculations**, along with a clean UI, history panel, and keyboard support.
+This repository contains the tasks I completed during my **Frontend Development Internship at CodeAlpha**.
 
 ---
 
-## 🚀 Features
-
-* Standard Calculator Operations (+, −, ×, ÷)
-* Scientific Functions (sin, cos, tan, log, ln, π, e, |x|)
-* Light / Dark Mode Toggle
-* Calculation History Panel
-* Memory Functions (MC, MR, M+, M−)
-* Keyboard Support
-* Copy Result to Clipboard
-* Interactive Button Animations
-* Responsive Design
+## 👨‍💻 About Me
+- Name: Vraj Parekh  
+- Role: Frontend Developer Intern  
+- Skills: HTML, CSS, JavaScript  
 
 ---
 
-## 📁 Project Structure
+## 📌 Tasks Completed
 
-```
-CodeAlpha_Calculator
-│
-├── index.html
-├── style.css
-├── script.js
-└── README.md
-```
+### ✅ Task 1 – Calculator 🧮
+🔹 Description:  
+A simple and responsive calculator built using JavaScript.
+
+🔹 Features:
+- Basic arithmetic operations (+, −, ×, ÷)
+- Responsive design
+- Clean and minimal UI
+- Fast calculations
+
+🔗 Live Demo: https://your-live-link.com  
+🔗 GitHub: https://github.com/your-username/CodeAlpha_Calculator  
+
+---
+
+### ✅ Task 2 – Music Player 🎧 (MELO)
+🔹 Description:  
+A modern web music player with smooth UI and controls.
+
+🔹 Features:
+- Play / Pause
+- Next / Previous track
+- Progress bar
+- Interactive UI
+- Responsive design
+
+🔗 Live Demo: https://your-live-link.com  
+🔗 GitHub: https://github.com/your-username/MELO  
+
+---
+
+### ✅ Task 3 – Portfolio Website 🌐
+🔹 Description:  
+A personal portfolio website to showcase projects and skills.
+
+🔹 Features:
+- About Me section
+- Projects showcase
+- Contact section
+- Responsive design
+- Modern UI/UX
 
 ---
 
 ## 🛠️ Technologies Used
-
-* HTML5
-* CSS3
-* JavaScript (Vanilla JS)
-
----
-
-## ▶️ How to Run the Project
-
-1. Download or clone the repository.
-
-2. Open the project folder:
-
-```
-CodeAlpha_Calculator
-```
-
-3. Run the calculator by opening:
-
-```
-index.html
-```
-
-in any modern web browser.
+- HTML5  
+- CSS3  
+- JavaScript (ES6)  
 
 ---
 
-## 📌 Internship Task
-
-This project was created as part of the **CodeAlpha Frontend Development Internship Program** to demonstrate frontend skills using JavaScript and modern UI design.
-Live Website
-
-https://vrajparekh1312.github.io/CodeAlpha_Calculator/
-
----
-
-## 👨‍💻 Author
-
-**Vraj Parekh**
-
-Frontend Developer | Web Development Enthusiast
-
----
-
-⭐ If you like this project, feel free to star the repository!
+## 📂 Folder Structure
