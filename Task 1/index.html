@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+    <!-- ══ LEFT: CALCULATOR ══ -->
+    <div id="calculator">
+
+        <div id="titlebar">
+            <span id="calc-title">Calculator</span>
+            <div id="titlebar-controls">
+                <button id="theme-toggle" onclick="toggleTheme()">Light Mode</button>
+                <div id="mode-switcher">
+                    <button id="btn-standard" class="mode-btn active" onclick="setMode('standard')">Standard</button>
+                    <button id="btn-scientific" class="mode-btn" onclick="setMode('scientific')">Scientific</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="display-area">
+            <div id="last_operation_history"></div>
+            <div id="box" class="box">0</div>
+            <div id="display-actions">
+                <div id="memory-display">M: 0</div>
+            </div>
+        </div>
+
+        <!-- Scientific panel — sits above the keypad, hidden by default -->
+        <div id="sci-panel">
+            <button class="sci-btn" onclick="sciFunc('sin')">sin</button>
+            <button class="sci-btn" onclick="sciFunc('cos')">cos</button>
+            <button class="sci-btn" onclick="sciFunc('tan')">tan</button>
+            <button class="sci-btn" onclick="sciFunc('log')">log</button>
+            <button class="sci-btn" onclick="sciFunc('ln')">ln</button>
+            <button class="sci-btn" onclick="sciFunc('pi')">π</button>
+            <button class="sci-btn" onclick="sciFunc('e')">e</button>
+            <button class="sci-btn" onclick="sciFunc('abs')">|x|</button>
+        </div>
+
+        <div id="keypad">
+
+            <!-- Memory row -->
+            <button class="mem-btn" onclick="memoryClear()">MC</button>
+            <button class="mem-btn" onclick="memoryRecall()">MR</button>
+            <button class="mem-btn" onclick="memoryAdd()">M+</button>
+            <button class="mem-btn" onclick="memorySub()">M−</button>
+
+            <!-- Function row -->
+            <button class="fn-btn"  onclick="calculate_percentage()">%</button>
+            <button class="fn-btn"  onclick="division_one()">1/x</button>
+            <button class="fn-btn"  onclick="power_of()">x²</button>
+            <button class="fn-btn"  onclick="square_root()">√</button>
+
+            <!-- 7 8 9 ÷ -->
+            <button class="num-btn" onclick="button_number('7')">7</button>
+            <button class="num-btn" onclick="button_number('8')">8</button>
+            <button class="num-btn" onclick="button_number('9')">9</button>
+            <button class="op-btn operator" id="divOp"   onclick="button_number('/')">÷</button>
+
+            <!-- 4 5 6 × -->
+            <button class="num-btn" onclick="button_number('4')">4</button>
+            <button class="num-btn" onclick="button_number('5')">5</button>
+            <button class="num-btn" onclick="button_number('6')">6</button>
+            <button class="op-btn operator" id="multiOp" onclick="button_number('*')">×</button>
+
+            <!-- 1 2 3 − -->
+            <button class="num-btn" onclick="button_number('1')">1</button>
+            <button class="num-btn" onclick="button_number('2')">2</button>
+            <button class="num-btn" onclick="button_number('3')">3</button>
+            <button class="op-btn operator" id="subOp"   onclick="button_number('-')">−</button>
+
+            <!-- +/- 0 . + -->
+            <button class="fn-btn"  onclick="plus_minus()">+/−</button>
+            <button class="num-btn" onclick="button_number('0')">0</button>
+            <button class="num-btn" id="dot" value="." onclick="button_number('.')">.</button>
+            <button class="op-btn operator" id="plusOp"  onclick="button_number('+')">+</button>
+
+            <!-- C  ⌫  = -->
+            <button class="wide-btn fn-btn"  onclick="button_clear()">C</button>
+            <button class="fn-btn"  id="backspace_btn" onclick="backspace_remove()">⌫</button>
+            <button class="wide-btn eq-btn"  id="equal_sign" value="=" onclick="button_number('=')">=</button>
+
+        </div>
+    </div>
+
+    <!-- ══ RIGHT: HISTORY SIDEBAR ══ -->
+    <div id="history-sidebar">
+        <div id="history-header">
+            <span>History</span>
+            <button id="history-clear-btn" onclick="clearHistory()">Clear</button>
+        </div>
+        <div id="history-panel">
+            <div id="history-empty">No calculations yet</div>
+        </div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

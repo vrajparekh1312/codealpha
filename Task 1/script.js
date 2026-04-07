@@ -1,0 +1,654 @@
+var operators = ["+", "-", "/", "*"];
+
+var box = null;
+var last_operation_history = null;
+var operator = null;
+var equal = null;
+var dot = null;
+
+var firstNum = true;
+
+var numbers = [];
+var operator_value;
+var last_button;
+var calc_operator;
+var last_operator = null; // FIX #1: Declared explicitly to prevent reference errors
+
+var total;
+
+var key_combination = []
+
+var memory = 0;
+var audioContext = null;
+var soundEnabled = true;
+
+// Function to play click sound + vibration (FIX #6)
+function playSound() {
+    if (!soundEnabled) return;
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+
+        // FIX #6: Vibration feedback on supported devices
+        if (navigator.vibrate) {
+            navigator.vibrate(30);
+        }
+    } catch (e) {
+        // AudioContext not available - silently continue
+    }
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    var btn = document.getElementById("sound-btn");
+    btn.textContent = soundEnabled ? "\uD83D\uDD0A Sound" : "\uD83D\uDD07 Muted";
+    btn.classList.toggle("muted", !soundEnabled);
+}
+
+function copyResult() {
+    box = document.getElementById("box");
+    navigator.clipboard.writeText(box.innerText).then(function() {
+        var btn = document.getElementById("copy-btn");
+        btn.textContent = "\u2713 Copied";
+        setTimeout(function() { btn.textContent = "\uD83D\uDCCB Copy"; }, 1500);
+    });
+}
+
+// Memory functions
+function memoryAdd() {
+    playSound();
+    box = document.getElementById("box");
+    memory += parseFloat(box.innerText) || 0;
+    updateMemoryDisplay();
+}
+
+function memorySub() {
+    playSound();
+    box = document.getElementById("box");
+    memory -= parseFloat(box.innerText) || 0;
+    updateMemoryDisplay();
+}
+
+function memoryClear() {
+    playSound();
+    memory = 0;
+    updateMemoryDisplay();
+}
+
+function memoryRecall() {
+    playSound();
+    box = document.getElementById("box");
+    box.innerText = memory;
+    firstNum = true;
+    updateMemoryDisplay();
+}
+
+function updateMemoryDisplay() {
+    var memDisplay = document.getElementById("memory-display");
+    memDisplay.innerText = "Memory: " + (memory === 0 ? "0" : memory.toFixed(2));
+}
+
+// Clear history panel
+function clearHistory() {
+    playSound();
+    var panel = document.getElementById("history-panel");
+    panel.innerHTML = '<div id="history-empty">No calculations yet</div>';
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("light");
+    var btn = document.getElementById("theme-toggle");
+    btn.textContent = document.body.classList.contains("light") ? "\uD83C\uDF11 Dark Mode" : "\uD83C\uDF17 Light Mode";
+}
+
+function addHistory(entry) {
+    var panel = document.getElementById("history-panel");
+    // Remove empty-state placeholder if present
+    var empty = document.getElementById("history-empty");
+    if (empty) empty.remove();
+
+    var parts = entry.split(" = ");
+    var p = document.createElement("p");
+    if (parts.length === 2) {
+        p.textContent = parts[0];
+        var span = document.createElement("span");
+        span.className = "result-line";
+        span.textContent = "= " + parts[1];
+        p.appendChild(span);
+    } else {
+        p.textContent = entry;
+    }
+    panel.appendChild(p);
+    panel.scrollTop = panel.scrollHeight;
+}
+
+// Switch between Standard and Scientific modes
+function setMode(mode) {
+    var panel = document.getElementById("sci-panel");
+    var btnStd = document.getElementById("btn-standard");
+    var btnSci = document.getElementById("btn-scientific");
+    if (mode === "scientific") {
+        panel.classList.add("visible");
+        btnSci.classList.add("active");
+        btnStd.classList.remove("active");
+    } else {
+        panel.classList.remove("visible");
+        btnStd.classList.add("active");
+        btnSci.classList.remove("active");
+    }
+}
+
+// Scientific function handler
+function sciFunc(fn) {
+    playSound();
+    box = document.getElementById("box");
+    var val = parseFloat(box.innerText);
+    var result;
+    switch(fn) {
+        case 'sin': result = Math.sin(val * Math.PI / 180); break;
+        case 'cos': result = Math.cos(val * Math.PI / 180); break;
+        case 'tan': result = Math.tan(val * Math.PI / 180); break;
+        case 'log': 
+            if (val <= 0) { box.innerText = "Error"; return; }
+            result = Math.log10(val); break;
+        case 'ln':
+            if (val <= 0) { box.innerText = "Error"; return; }
+            result = Math.log(val); break;
+        case 'pi': result = Math.PI; firstNum = true; break;
+        case 'e':  result = Math.E;  firstNum = true; break;
+        case 'abs': result = Math.abs(val); break;
+        default: return;
+    }
+    if (!Number.isFinite(result)) { box.innerText = "Error"; return; }
+    result = parseFloat(result.toPrecision(10));
+    box.innerText = result;
+    numbers = [result];
+    firstNum = false;
+}
+
+function button_number(button) {
+    playSound();
+
+    operator = document.getElementsByClassName("operator");
+    box = document.getElementById("box");
+    last_operation_history = document.getElementById("last_operation_history");
+    equal = document.getElementById("equal_sign").value;
+    dot = document.getElementById("dot").value;
+    
+    last_button = button;
+
+    // if button is not an operator or = sign
+    if (!operators.includes(button) && button!=equal){
+        // if it is the first button clicked
+        if (firstNum){
+            // and it's a dot, show 0.
+            if (button == dot){
+                box.innerText = "0"+dot;
+            }
+            // else clear box and show the number
+            else {
+                box.innerText = button;
+            }
+            firstNum = false;
+        }
+        else {
+
+            // return if the box value is 0
+            if (box.innerText.length == 1 && box.innerText == 0){
+
+                if (button == dot){
+                    box.innerText += button;
+                }
+                return;
+            }
+            // return if the box already has a dot and clicked button is a dot
+            if (box.innerText.includes(dot) && button == dot){
+                return;
+            }
+            // maximum allowed numbers inputted are 20
+            if (box.innerText.length == 20){
+                return;
+            }
+
+            // if pressed dot and box already has a - sign, show -0.
+            if (button == dot && box.innerText == "-"){
+                box.innerText = "-0"+dot;
+            }
+            // else append number
+            else {
+                box.innerText += button;
+            }  
+        }
+    }
+    // if it's an operator or = sign
+    else {
+
+        // return if operator is already pressed
+        if (operator_value != null && button == operator_value){
+            return
+        }
+
+        // show minus sign if it's the first value selected and finally return
+        if (button == "-" && box.innerText == 0){
+            box.innerText = button;
+            firstNum = false;
+            operator_value = button
+            showSelectedOperator()
+            return;
+        }
+        // return if minus operator pressed and it's already printed on screen 
+        else if (operators.includes(button) && box.innerText == "-"){
+            return
+        }
+        // return if minus operator pressed and history already has equal sign
+        else if (button == "-" && operator_value == "-" && last_operation_history.innerText.includes("=")){
+            return
+        }
+
+        // set value of operator if it's one
+        if (operators.includes(button)){
+            if (last_operator != null){
+                calc_operator = last_operator
+            }
+            else {
+                calc_operator = button
+            }
+            if (button == "*"){
+                last_operator = "×"
+            }
+            else if (button == "/"){
+                last_operator = "÷"
+            }
+            else {
+                last_operator = button
+            }
+            operator_value = button
+            firstNum = true
+            showSelectedOperator()
+        }
+
+        // add first number to numbers array and show it on history
+        if (numbers.length == 0){
+            numbers.push(box.innerText)
+            if (last_operator != null){
+                last_operation_history.innerText = box.innerText + " " + last_operator
+            }
+        }
+        // rest of calculations
+        else {   
+            if (numbers.length == 1){
+                numbers[1] = box.innerText
+            }
+            var temp_num = box.innerText
+
+            // calculate total
+            if (button==equal && calc_operator != null){
+                var total = calculate(numbers[0], numbers[1], calc_operator)
+                box.innerText = total;
+
+                // append second number to history
+                if (!last_operation_history.innerText.includes("=")){
+                    last_operation_history.innerText += " " + numbers[1] + " ="
+                }
+
+                temp_num = numbers[0]
+
+                numbers[0] = total
+                operator_value = null
+                showSelectedOperator()
+
+                // replace first number of history with the value of total
+                var history_arr = last_operation_history.innerText.split(" ")
+                history_arr[0] = temp_num
+                last_operation_history.innerText = history_arr.join(" ")
+
+                // add to history panel
+                addHistory(history_arr[0] + " " + history_arr[1] + " " + history_arr[2] + " = " + total)
+            }
+            // update history with the value on screen and the pressed operator
+            else if (calc_operator != null) {
+                 last_operation_history.innerText = temp_num + " " + last_operator
+                 calc_operator = button
+                 numbers = []
+                 numbers.push(box.innerText)
+            }
+        }
+    }
+
+}
+// highlight operator button when selected
+function showSelectedOperator(){
+    var elements = document.getElementsByClassName("operator");
+    for (var i = 0; i < elements.length; i++){
+        elements[i].classList.remove("selected");
+    }
+    var activeId = null;
+    if      (operator_value == "+") activeId = "plusOp";
+    else if (operator_value == "-") activeId = "subOp";
+    else if (operator_value == "*") activeId = "multiOp";
+    else if (operator_value == "/") activeId = "divOp";
+    if (activeId) document.getElementById(activeId).classList.add("selected");
+}
+
+// FIX #3: Division by zero protection added
+function calculate(num1, num2, operator){
+
+    if (operator === "+"){
+        total = (parseFloat)(num1)+(parseFloat)(num2)
+    }
+    else if (operator === "-"){
+        total = (parseFloat)(num1)-(parseFloat)(num2)
+    }
+    else if (operator === "*"){
+        total = (parseFloat)(num1)*(parseFloat)(num2)
+    }
+    else if (operator === "/"){
+        // FIX #3: Prevent division by zero crash
+        if (parseFloat(num2) === 0) {
+            box = document.getElementById("box");
+            box.innerText = "Error";
+            last_operation_history = document.getElementById("last_operation_history");
+            last_operation_history.innerText = "Cannot divide by zero";
+            numbers = [];
+            operator_value = null;
+            last_operator = null;
+            firstNum = true;
+            showSelectedOperator();
+            return "Error";
+        }
+        total = (parseFloat)(num1)/(parseFloat)(num2)
+    }
+    else {
+        if (total == box.innerText){
+            return total
+        }
+        else {
+            return box.innerText
+        }
+    }
+    // if total is not integer, show maximum 12 decimal places
+    if (!Number.isInteger(total)){
+        total = total.toPrecision(12);
+    }
+    return parseFloat(total);
+}
+
+// FIX #2: Proper reset without page reload
+function button_clear(){
+    playSound();
+    box = document.getElementById("box");
+    last_operation_history = document.getElementById("last_operation_history");
+
+    box.innerText = "0";
+    last_operation_history.innerText = "0";
+
+    numbers = [];
+    operator_value = null;
+    last_operator = null;
+    calc_operator = null;
+    firstNum = true;
+
+    showSelectedOperator();
+}
+
+function backspace_remove(){
+    box = document.getElementById("box");
+    var last_num = box.innerText;
+    last_num = last_num.slice(0, -1);
+    box.innerText = last_num;
+    if (box.innerText.length == 0){
+        box.innerText = 0;
+        firstNum = true;
+    }
+}
+
+
+// function to change the sign of the number currently on screen
+function plus_minus(){
+    box = document.getElementById("box");
+
+    // if any operator is already pressed
+    if (last_operator != null){
+        if (numbers.length>0){
+            // if last button pressed is an operator
+            if (operators.includes(last_button)){
+                // if the displayed text is just a negative sign, replace it with a 0
+                if (box.innerText == "-"){
+                    box.innerText = 0
+                    firstNum = true
+                    return
+                }
+                // if the displayed text is not a just a negative sign, replace it with a negative sign
+                else {
+                    box.innerText = "-"
+                    firstNum = false
+                }
+            }
+            // if last button pressed is not an operator, change its sign
+            else {
+                box.innerText = -box.innerText
+
+                if (numbers.length==1){
+                    numbers[0] = box.innerText
+                }
+                else {
+                    numbers[1] = box.innerText
+                }
+            }
+        }
+        return
+    }
+
+    // if displayed text is 0, replace it with a negative sign
+    if (box.innerText == 0){
+        box.innerText = "-"
+        firstNum = false
+        return
+    }
+    box.innerText = -box.innerText
+}
+
+// function to calculate square root of the number currently on screen
+function square_root(){
+    box = document.getElementById("box");
+    var val = parseFloat(box.innerText);
+    if (val < 0) {
+        box.innerText = "Error";
+        return;
+    }
+    var square_num = Math.sqrt(val);
+    box.innerText = square_num;
+    numbers.push(square_num);
+}
+
+// function to calculate the division of 1 with the number currently on screen
+function division_one(){
+    box = document.getElementById("box");
+    var val = parseFloat(box.innerText);
+    if (val === 0) {
+        box.innerText = "Error";
+        last_operation_history = document.getElementById("last_operation_history");
+        last_operation_history.innerText = "Cannot divide by zero";
+        numbers = [];
+        operator_value = null;
+        last_operator = null;
+        firstNum = true;
+        return;
+    }
+    var square_num = 1 / val;
+    box.innerText = square_num;
+    numbers.push(square_num);
+}
+
+// function to calculate the power of the number currently on screen
+function power_of(){
+    box = document.getElementById("box");
+    var square_num =Math.pow(box.innerText, 2)
+    box.innerText = square_num
+    numbers.push(square_num)
+}
+
+// function to calculate the percentage of a number
+function calculate_percentage(){
+    var elements = document.getElementsByClassName("operator");
+    box = document.getElementById("box");
+
+    if (numbers.length > 0 && last_operator != null){
+
+        var perc_value = ((box.innerText / 100) * numbers[0])
+        if (!Number.isInteger(perc_value)) {
+            perc_value = perc_value.toFixed(2);
+        }
+        box.innerText = perc_value
+        numbers.push(box.innerText)
+    
+        // append second number to history
+        if (!last_operation_history.innerText.includes("=")){
+            last_operation_history.innerText += " " + numbers[1] + " ="
+        }
+    }
+    else {
+        box.innerText = box.innerText/100
+    }
+
+    numbers.push(box.innerText)
+    var res = calculate(numbers[0], numbers[1], last_operator)
+    box.innerText = res
+    operator_value = "="
+
+    // deselect operator if any selected
+    operator_value = null;
+    showSelectedOperator();
+}
+
+// function to clear last number typed into the display
+function clear_entry(){
+    box = document.getElementById("box");
+
+    if (numbers.length > 0 && last_operator != null){
+        box.innerText = 0
+        var temp = numbers[0]
+        numbers = []
+        numbers.push(temp)
+        firstNum = true;
+    }
+}
+
+document.addEventListener('keydown', keyPressed);
+document.addEventListener('keyup', keyReleased);
+
+// Flash the matching on-screen button when a keyboard key is pressed
+function flashButton(key) {
+    var map = {
+        '0': '[onclick="button_number(\'0\')"]',
+        '1': '[onclick="button_number(\'1\')"]',
+        '2': '[onclick="button_number(\'2\')"]',
+        '3': '[onclick="button_number(\'3\')"]',
+        '4': '[onclick="button_number(\'4\')"]',
+        '5': '[onclick="button_number(\'5\')"]',
+        '6': '[onclick="button_number(\'6\')"]',
+        '7': '[onclick="button_number(\'7\')"]',
+        '8': '[onclick="button_number(\'8\')"]',
+        '9': '[onclick="button_number(\'9\')"]',
+        '+': '[onclick="button_number(\'+\')"]',
+        '-': '[onclick="button_number(\'-\')"]',
+        '*': '[onclick="button_number(\'*\')"]',
+        '/': '[onclick="button_number(\'/\')"]',
+        '.': '[onclick="button_number(\'.\')"]',
+        ',': '[onclick="button_number(\'.\')"]',
+        'Enter': '#equal_sign',
+        'Backspace': '#backspace_btn',
+        'Delete': '[onclick="button_clear()"]'
+    };
+    var selector = map[key];
+    if (!selector) return;
+    var btn = document.querySelector(selector);
+    if (!btn) return;
+    btn.classList.remove('flash');
+    void btn.offsetWidth; // reflow to restart animation
+    btn.classList.add('flash');
+    setTimeout(function() { btn.classList.remove('flash'); }, 200);
+}
+
+// function to capture keydown events
+function keyPressed(e) {
+    e.preventDefault()
+    var equal = document.getElementById("equal_sign").value;
+    var dot = document.getElementById("dot").value;
+
+    if (e.key == "Delete"){
+        flashButton('Delete');
+        button_clear();
+        return;
+    }
+
+    var isNumber = isFinite(e.key);
+    var enterPress;
+    var dotPress;
+    var commaPress = false;
+
+    if (e.key == "Enter"){
+        enterPress = equal;
+    }
+    if (e.key == "."){
+        dotPress = dot;
+    }
+    if (e.key == ","){
+        commaPress = true;
+    }
+    
+    if (isNumber || operators.includes(e.key) || e.key == "Enter" || e.key == dotPress || 
+        commaPress || e.key == "Backspace"){
+        flashButton(e.key);
+        if (e.key == "Enter"){
+            button_number(enterPress)
+        }
+        else if (e.key == "Backspace"){
+            document.getElementById("backspace_btn").style.backgroundColor  = "#999999";
+            backspace_remove()
+        }
+        else if (commaPress){
+            button_number(dot)
+        }
+        else {
+            button_number(e.key) 
+        }   
+    }
+    if (e.key) {
+        key_combination[e.code] = e.key;
+    }
+}
+
+// function to capture keyup events
+function keyReleased(e){
+    if (key_combination['ControlLeft'] && key_combination['KeyV']) {
+        navigator.clipboard.readText().then(text => {
+            box = document.getElementById("box");
+            var isNumber = isFinite(text);
+            if (isNumber){
+                var copy_number = text
+                firstNum = true
+                button_number(copy_number)
+            }
+        }).catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
+        });
+    }
+    if (key_combination['ControlLeft'] && key_combination['KeyC']) {
+        box = document.getElementById("box");
+        navigator.clipboard.writeText( box.innerText)
+    }
+    key_combination = [];
+    e.preventDefault();
+}
