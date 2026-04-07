@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vraj Parekh — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="ld-logo">VP.DEV</div>
+  <div class="ld-lines">
+    <div class="ld-line">▶ Initializing Vraj Parekh Portfolio System...</div>
+    <div class="ld-line">▶ Loading AI Modules...</div>
+    <div class="ld-line">▶ Rendering 3D Interface...</div>
+  </div>
+  <div class="ld-bar-wrap"><div class="ld-bar" id="ld-bar"></div></div>
+  <div class="ld-pct" id="ld-pct">0%</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-o"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="pg"></div>
+
+<!-- THREE.JS + PARTICLES CANVASES -->
+<canvas id="three-cv"></canvas>
+<canvas id="p-cv"></canvas>
+
+<!-- BLOBS -->
+<div class="blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<!-- LOGO CLICK COUNTER -->
+<div class="logo-click-counter" id="click-counter"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" id="nav-logo" onclick="handleLogoClick()">
+    <span class="logo-dot"></span>
+    <span id="vp-dev">VP.DEV</span>
+    <span class="logo-click-hint">×5</span>
+    <span id="dev-hint-bubble">🔒 Click 5× to unlock Developer Mode</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-end">
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+    <button class="icon-btn" onclick="openTerminal()" title="Terminal [Ctrl+~]">⌨️</button>
+    <a href="https://www.linkedin.com/in/vraj-parekh-7b801b30b" target="_blank" class="nav-btn">Hire Me</a>
+    <div class="ham" id="ham" onclick="toggleMobNav()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mob-nav">
+  <button class="mob-close" onclick="toggleMobNav()">✕</button>
+  <a href="#about" onclick="toggleMobNav()">About</a>
+  <a href="#skills" onclick="toggleMobNav()">Skills</a>
+  <a href="#projects" onclick="toggleMobNav()">Projects</a>
+  <a href="#achievements" onclick="toggleMobNav()">Achievements</a>
+  <a href="#contact" onclick="toggleMobNav()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero-section" style="position:relative;z-index:1">
+  <div id="hero">
+    <div class="hero-left">
+      <div class="hero-pill"><span class="pill-dot"></span>Available for opportunities</div>
+      <h1 class="hero-h1">
+        <span class="h1-sm">Hello, I'm</span>
+        <span class="h1-grad">Vraj Parekh</span>
+      </h1>
+      <div class="hero-type">
+        <span class="type-word" id="typing-text"></span><span class="cb-blink">|</span>
+      </div>
+      <p class="hero-desc">Computer Engineering student at MBIT, CVM University · AI Developer · Hackathon Winner building intelligent solutions that bridge people and technology.</p>
+      <div class="hero-btns">
+        <button class="btn btn-p" onclick="scrollToSection('projects');addRipple(event,this)">View Projects →</button>
+        <a href="https://www.linkedin.com/in/vraj-parekh-7b801b30b" target="_blank" class="btn btn-g" onclick="addRipple(event,this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <button class="btn btn-g" onclick="dlResume();addRipple(event,this)">⬇ Resume</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="card-3d-wrap">
+        <div class="card-3d" id="card3d">
+          <div class="photo-wrap">
+            <img src="Screenshot 2026-03-17 191605.png" alt="Vraj Parekh" class="photo-img" onerror="this.style.display='none'">
+            <div class="photo-ring"></div>
+            <div class="photo-ring2"></div>
+          </div>
+          <div class="card-name">VRAJ PAREKH</div>
+          <div class="card-role">CE Student · AI Developer</div>
+          <div class="card-badges">
+            <span class="cbadge">Java</span>
+            <span class="cbadge v">Python</span>
+            <span class="cbadge t">Node.js</span>
+            <span class="cbadge">GCP</span>
+          </div>
+        </div>
+        <div class="fb fb1">🏆 Hackathon Winner</div>
+        <div class="fb fb2">☁️ GCP Certified</div>
+        <div class="fb fb3">⭐ CPI: 8.79</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>SCROLL</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-wrap reveal">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val" data-count="4">0</div><div class="stat-lbl">Projects Built</div></div>
+    <div class="stat"><div class="stat-val" data-count="4">0</div><div class="stat-lbl">GCP Certifications</div></div>
+    <div class="stat"><div class="stat-val" data-count="1">0</div><div class="stat-lbl">Hackathon Win 🏆</div></div>
+    <div class="stat"><div class="stat-val" data-count="879" data-suffix="/1000">0</div><div class="stat-lbl">Academic CPI</div></div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="inner">
+    <div class="ey reveal">About Me</div>
+    <h2 class="st reveal">The person behind the code</h2>
+    <div class="about-grid">
+      <div class="reveal" style="transition-delay:.1s">
+        <div class="acard">
+          <div class="acard-title">Profile</div>
+          <div class="info-row"><div class="i-icon">🎓</div><div><div class="i-lbl">Degree</div><div class="i-val">B.Tech Computer Engineering</div><div style="font-size:.72rem;color:var(--t2);margin-top:.1rem">MBIT, CVM University</div></div></div>
+          <div class="info-row"><div class="i-icon">📊</div><div><div class="i-lbl">Academic</div><div class="i-val">CPI: 8.79 · 10th: 91.43%</div></div></div>
+          <div class="info-row"><div class="i-icon">📧</div><div><div class="i-lbl">Email</div><div class="i-val" style="font-size:.8rem"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a0d6d2c1ca9193919292909095e0c7cdc1c9cc8ec3cfcd">[email&#160;protected]</a></div></div></div>
+          <div class="info-row"><div class="i-icon">📞</div><div><div class="i-lbl">Phone</div><div class="i-val">+91 9316464837</div></div></div>
+          <div class="info-row"><div class="i-icon">📍</div><div><div class="i-lbl">Location</div><div class="i-val">Gujarat, India</div></div></div>
+          <div class="info-row"><div class="i-icon">💼</div><div><div class="i-lbl">LinkedIn</div><div class="i-val" style="font-size:.78rem"><a href="https://www.linkedin.com/in/vraj-parekh-7b801b30b" target="_blank" style="color:var(--neon);text-decoration:none">vraj-parekh-7b801b30b</a></div></div></div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.2s">
+        <div class="about-text">
+          <p>I'm <strong>Vraj Ashokbhai Parekh</strong>, a passionate Computer Engineering student with a deep interest in <strong>AI, full-stack development</strong>, and building solutions that make a real difference.</p>
+          <p>I won <strong>1st place at the CVMU 4.0 Hackathon</strong> with CitySolve and built AI-powered systems for <strong>Kochi Metro Rail (KMRL)</strong> at SIH 2025.</p>
+          <p>Armed with <strong>4 Google Cloud certifications</strong> and hands-on experience across the full stack, I thrive at the intersection of intelligent systems and scalable engineering.</p>
+        </div>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-dot">🎓</div><div><div class="tl-h">B.Tech Computer Engineering</div><div class="tl-p">MBIT, CVM University · CPI: 8.79</div><div class="tl-d">2023 — Present</div></div></div>
+          <div class="tl-item"><div class="tl-dot">🏆</div><div><div class="tl-h">1st Place — CVMU 4.0 Hackathon</div><div class="tl-p">CitySolve: Smart civic issue reporting platform</div><div class="tl-d">2024</div></div></div>
+          <div class="tl-item"><div class="tl-dot">☁️</div><div><div class="tl-h">Google Cloud Certified × 4</div><div class="tl-p">GenAI, Infrastructure, Cloud Computing, Compute Engine</div><div class="tl-d">2024</div></div></div>
+          <div class="tl-item"><div class="tl-dot">🤖</div><div><div class="tl-h">Infer@ — SIH 2025</div><div class="tl-p">AI Document Intelligence for Kochi Metro Rail (KMRL)</div><div class="tl-d">2025</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="inner">
+    <div class="ey reveal">Skills</div>
+    <h2 class="st reveal">Tools I work with</h2>
+    <p class="sd reveal">Full-stack arsenal — from AI and cloud to backend APIs and mobile development.</p>
+    <div class="sk-grid">
+      <div class="sk-card reveal" style="transition-delay:.1s">
+        <div class="sk-head">Languages</div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Python</span><span class="sk-pct">90%</span></div><div class="sk-track"><div class="sk-fill fn" data-w="90"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Java</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill fn" data-w="85"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">JavaScript</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill fn" data-w="80"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">C</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill fn" data-w="75"></div></div></div>
+      </div>
+      <div class="sk-card reveal" style="transition-delay:.15s">
+        <div class="sk-head">Web &amp; Backend</div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Node.js / Express</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill fv" data-w="85"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">REST APIs</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill fv" data-w="80"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">HTML / CSS</span><span class="sk-pct">90%</span></div><div class="sk-track"><div class="sk-fill fv" data-w="90"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Kotlin (Android)</span><span class="sk-pct">65%</span></div><div class="sk-track"><div class="sk-fill fv" data-w="65"></div></div></div>
+      </div>
+      <div class="sk-card reveal" style="transition-delay:.2s">
+        <div class="sk-head">Databases</div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">MongoDB</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill ft" data-w="85"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">MySQL</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill ft" data-w="80"></div></div></div>
+      </div>
+      <div class="sk-card reveal" style="transition-delay:.25s">
+        <div class="sk-head">AI / Cloud</div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Google Cloud (GCP)</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill fa" data-w="80"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">OpenCV</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill fa" data-w="75"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">Tesseract OCR</span><span class="sk-pct">78%</span></div><div class="sk-track"><div class="sk-fill fa" data-w="78"></div></div></div>
+        <div class="sk-bar"><div class="sk-row"><span class="sk-name">AI / ML</span><span class="sk-pct">72%</span></div><div class="sk-track"><div class="sk-fill fa" data-w="72"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="inner">
+    <div class="ey reveal">Projects</div>
+    <h2 class="st reveal">What I've built</h2>
+    <p class="sd reveal">From hackathon winners to enterprise AI — real projects, real impact.</p>
+    <div class="pj-grid">
+      <div class="pj-card gold reveal" style="transition-delay:.1s" onmousemove="pjGlow(event,this)" onclick="openModal('cs')">
+        <div class="pj-tag tag-w">🏆 Hackathon Winner</div>
+        <h3 class="pj-title">CitySolve</h3>
+        <p class="pj-sub">Smart Civic Issue Reporting Platform</p>
+        <ul class="pj-feats">
+          <li>GPS-tagged citizen issue reports with photos</li>
+          <li>Government authority resolution dashboard</li>
+          <li>Real-time status tracking and workflow</li>
+          <li>Won 1st place at CVMU 4.0 Hackathon</li>
+        </ul>
+        <div class="pj-stack"><span class="tech-pill">HTML/CSS</span><span class="tech-pill">JavaScript</span><span class="tech-pill">Node.js</span><span class="tech-pill">Express.js</span><span class="tech-pill">MongoDB</span><span class="tech-pill">Kotlin</span></div>
+        <div class="pj-btns">
+          <button class="pj-btn pj-btn-p" onclick="event.stopPropagation();openModal('cs')">View Details</button>
+          <a href="https://citysolve.me/" target="_blank" class="pj-btn pj-btn-live" onclick="event.stopPropagation()">🌐 Live ↗</a>
+          <a href="https://github.com/vrajparekh1312" target="_blank" class="pj-btn pj-btn-g" onclick="event.stopPropagation()">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="pj-card reveal" style="transition-delay:.15s" onmousemove="pjGlow(event,this)" onclick="openModal('infer')">
+        <div class="pj-tag tag-a">🤖 AI · Enterprise</div>
+        <h3 class="pj-title">Infer@</h3>
+        <p class="pj-sub">AI Document Intelligence for KMRL</p>
+        <ul class="pj-feats">
+          <li>OCR-based document analysis and layout detection</li>
+          <li>Automated structured data extraction pipeline</li>
+          <li>Built for Kochi Metro Rail at SIH 2025</li>
+          <li>Intelligent document classification system</li>
+        </ul>
+        <div class="pj-stack"><span class="tech-pill">Python</span><span class="tech-pill">OpenCV</span><span class="tech-pill">Tesseract OCR</span><span class="tech-pill">Node.js</span><span class="tech-pill">MongoDB</span></div>
+        <div class="pj-btns">
+          <button class="pj-btn pj-btn-p" onclick="event.stopPropagation();openModal('infer')">View Details</button>
+          <a href="https://inferat-official.vercel.app/" target="_blank" class="pj-btn pj-btn-live" onclick="event.stopPropagation()">🌐 Live ↗</a>
+          <a href="https://github.com/vrajparekh1312" target="_blank" class="pj-btn pj-btn-g" onclick="event.stopPropagation()">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="pj-card reveal" style="transition-delay:.2s" onmousemove="pjGlow(event,this)" onclick="openModal('hc')">
+        <div class="pj-tag tag-a">🌿 AI · Healthcare</div>
+        <h3 class="pj-title">HerbCure</h3>
+        <p class="pj-sub">AI Herbal Medicine Detection System</p>
+        <ul class="pj-feats">
+          <li>Scan herbal medicines using Tesseract OCR</li>
+          <li>AI-powered alternative medicine recommendations</li>
+          <li>Intelligent cross-comparison system</li>
+          <li>Accessible healthcare through modern AI</li>
+        </ul>
+        <div class="pj-stack"><span class="tech-pill">Python</span><span class="tech-pill">AI/ML</span><span class="tech-pill">Tesseract OCR</span><span class="tech-pill">JavaScript</span><span class="tech-pill">Node.js</span></div>
+        <div class="pj-btns">
+          <button class="pj-btn pj-btn-p" onclick="event.stopPropagation();openModal('hc')">View Details</button>
+          <a href="https://github.com/vrajparekh1312" target="_blank" class="pj-btn pj-btn-g" onclick="event.stopPropagation()">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="pj-card reveal" style="transition-delay:.25s" onmousemove="pjGlow(event,this)" onclick="openModal('em')">
+        <div class="pj-tag tag-e">⛏️ Sustainability · AI</div>
+        <h3 class="pj-title">EnviroMine</h3>
+        <p class="pj-sub">Coal Mine Emission Analyzer</p>
+        <ul class="pj-feats">
+          <li>Calculate carbon emissions from operations</li>
+          <li>AI-driven reduction strategy generator</li>
+          <li>Sustainability scoring and detailed reports</li>
+          <li>Environmental impact visualization</li>
+        </ul>
+        <div class="pj-stack"><span class="tech-pill">HTML/CSS</span><span class="tech-pill">JavaScript</span><span class="tech-pill">Node.js</span><span class="tech-pill">AI Analysis</span></div>
+        <div class="pj-btns">
+          <button class="pj-btn pj-btn-p" onclick="event.stopPropagation();openModal('em')">View Details</button>
+          <a href="https://enviromine.netlify.app/" target="_blank" class="pj-btn pj-btn-live" onclick="event.stopPropagation()">🌐 Live ↗</a>
+          <a href="https://github.com/vrajparekh1312" target="_blank" class="pj-btn pj-btn-g" onclick="event.stopPropagation()">GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="inner">
+    <div class="ey reveal">Achievements</div>
+    <h2 class="st reveal">Milestones &amp; Recognition</h2>
+    <div class="ach-hero reveal">
+      <div class="trophy">🏆</div>
+      <div>
+        <div class="ach-title">1st Place — CVMU 4.0 Hackathon</div>
+        <div class="ach-desc">Built <strong style="color:var(--t1)">CitySolve</strong> — a full-stack civic issue reporting platform with GPS tracking, image uploads, and a government authority dashboard — winning first place among all competing teams.</div>
+      </div>
+    </div>
+    <div style="margin-top:3rem">
+      <div class="ey reveal" style="margin-bottom:1.4rem">Certifications</div>
+      <div class="certs-grid">
+        <div class="cert-card reveal" style="transition-delay:.1s"><div class="cert-icon">☁️</div><div><div class="cert-name">Google Cloud Infrastructure Expertise</div><div class="cert-iss">Google Cloud · 2024</div></div></div>
+        <div class="cert-card reveal" style="transition-delay:.14s"><div class="cert-icon">🖥️</div><div><div class="cert-name">Cloud Computing Fundamentals</div><div class="cert-iss">Google Cloud · 2024</div></div></div>
+        <div class="cert-card reveal" style="transition-delay:.18s"><div class="cert-icon">🤖</div><div><div class="cert-name">Level 3 GenAI: Prompt Engineering</div><div class="cert-iss">Google Cloud · 2024</div></div></div>
+        <div class="cert-card reveal" style="transition-delay:.22s"><div class="cert-icon">🛠️</div><div><div class="cert-name">Compute Engine &amp; Networking Skill Badges</div><div class="cert-iss">Google Cloud · 2024</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- LEADERSHIP -->
+<section id="leadership">
+  <div class="inner">
+    <div class="ey reveal">Leadership</div>
+    <h2 class="st reveal">Team &amp; Collaboration</h2>
+    <div class="lead-grid">
+      <div class="lead-card reveal" style="transition-delay:.1s"><div class="lead-icon">📋</div><div class="lead-title">Task Coordination</div><div class="lead-desc">Assigning tasks and tracking progress across hackathon and academic teams with clear milestone planning.</div></div>
+      <div class="lead-card reveal" style="transition-delay:.14s"><div class="lead-icon">💡</div><div class="lead-title">Creative Problem Solving</div><div class="lead-desc">Leading collaborative brainstorming that blends technical constraints with innovative solutions.</div></div>
+      <div class="lead-card reveal" style="transition-delay:.18s"><div class="lead-icon">🏗️</div><div class="lead-title">Architecture Decisions</div><div class="lead-desc">Driving system design and tech stack discussions for scalable, maintainable solutions.</div></div>
+      <div class="lead-card reveal" style="transition-delay:.22s"><div class="lead-icon">⚡</div><div class="lead-title">Deadline Delivery</div><div class="lead-desc">Consistently delivering polished products under tight hackathon and academic deadlines.</div></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="inner">
+    <div class="ey reveal">Contact</div>
+    <h2 class="st reveal">Let's build something great</h2>
+    <div class="ct-grid">
+      <div class="reveal" style="transition-delay:.1s">
+        <p class="sd" style="margin-bottom:0">Open to internships, collaborations, and interesting projects. Reach out — I would love to connect.</p>
+        <div class="ct-links">
+          <a href="/cdn-cgi/l/email-protection#4c3a3e2d267d7f7d7e7e7c7c790c2b212d2520622f2321" class="ct-link"><div class="cl-icon">✉️</div><div><span class="cl-lbl">Email</span><span class="cl-val"><span class="__cf_email__" data-cfemail="0e787c6f643f3d3f3c3c3e3e3b4e69636f6762206d6163">[email&#160;protected]</span></span></div></a>
+          <a href="tel:+919316464837" class="ct-link"><div class="cl-icon">📞</div><div><span class="cl-lbl">Phone</span><span class="cl-val">+91 9316464837</span></div></a>
+          <a href="https://github.com/vrajparekh1312" target="_blank" class="ct-link"><div class="cl-icon">🐙</div><div><span class="cl-lbl">GitHub</span><span class="cl-val">github.com/vrajparekh1312</span></div></a>
+          <a href="https://www.linkedin.com/in/vraj-parekh-7b801b30b" target="_blank" class="ct-link"><div class="cl-icon">💼</div><div><span class="cl-lbl">LinkedIn</span><span class="cl-val">vraj-parekh-7b801b30b</span></div></a>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.2s">
+        <div class="ct-form">
+          <div class="form-group"><label>Your Name</label><input type="text" placeholder="John Doe"></div>
+          <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+          <div class="form-group"><label>Message</label><textarea placeholder="Hi Vraj, I would love to collaborate on..."></textarea></div>
+          <button class="form-btn" id="form-btn" onclick="handleForm(this)">SEND MESSAGE →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">VRAJ PAREKH</div>
+  <p style="color:var(--t2);font-size:.8rem;font-family:var(--font-m)">Computer Engineering · AI Developer · Hackathon Winner</p>
+  <div class="footer-social">
+    <a href="https://github.com/vrajparekh1312" target="_blank" class="fsoc" title="GitHub">🐙</a>
+    <a href="https://www.linkedin.com/in/vraj-parekh-7b801b30b" target="_blank" class="fsoc" title="LinkedIn">💼</a>
+    <a href="/cdn-cgi/l/email-protection#b6c0c4d7dc8785878484868683f6d1dbd7dfda98d5d9db" class="fsoc" title="Email">✉️</a>
+  </div>
+  <p style="color:var(--t3);font-size:.72rem;font-family:var(--font-m)">© 2025 Vraj Ashokbhai Parekh · Built with passion 🚀</p>
+  <p style="color:var(--t3);font-size:.62rem;font-family:var(--font-m);margin-top:.3rem">[ Click logo 5× for Easter egg · Ctrl+~ for terminal ]</p>
+</footer>
+
+<!-- AI ASSISTANT -->
+<div id="ai-wrap">
+  <div class="ai-win" id="ai-win">
+    <div class="ai-hdr">
+      <div class="ai-av">🤖</div>
+      <div><div class="ai-hname">VP.AI ASSISTANT</div><div class="ai-status">● ONLINE</div></div>
+    </div>
+    <div class="ai-msgs" id="ai-msgs">
+      <div class="ai-bot">Hi 👋 I'm Vraj's AI. Ask me about his <b>projects</b>, <b>skills</b>, <b>achievements</b>, or how to <b>contact him</b>!</div>
+    </div>
+    <div class="ai-inp-row">
+      <input class="ai-inp" id="ai-inp" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendAI()">
+      <button class="ai-send" onclick="sendAI()">➤</button>
+    </div>
+  </div>
+  <button class="ai-bubble" onclick="toggleAI()">🤖</button>
+</div>
+
+<!-- PROJECT MODAL -->
+<div id="modal-ov" onclick="closeModalBg(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- DEVELOPER MODE EASTER EGG -->
+<div id="dev-overlay" onclick="closeDevBg(event)">
+  <div class="dev-terminal" id="dev-terminal">
+    <div class="dev-titlebar">
+      <div class="dev-dots"><div class="dev-dot dd-r"></div><div class="dev-dot dd-y"></div><div class="dev-dot dd-g"></div></div>
+      <div class="dev-ttitle">vraj@portfolio:~$ DEVELOPER_MODE</div>
+      <button class="dev-close-btn" onclick="closeDev()">✕ ESC</button>
+    </div>
+    <div class="dev-body" id="dev-body"></div>
+  </div>
+</div>
+
+<!-- REWARD MODAL -->
+<div id="reward-overlay">
+  <div class="reward-box">
+    <div class="reward-confetti" id="reward-confetti"></div>
+    <span class="reward-emoji">🎉</span>
+    <div class="reward-title">ACCESS GRANTED!</div>
+    <div class="reward-msg"><b style="color:#28ca40">Congrats! You unlocked Developer Mode.</b><br><br>You found the hidden Easter egg 🥚<br>Vraj appreciates your curiosity and attention to detail!</div>
+    <div class="reward-badge">🔓 DEVELOPER MODE UNLOCKED</div><br>
+    <button class="reward-close-btn" onclick="closeReward()">[ CLOSE TERMINAL ]</button>
+  </div>
+</div>
+
+<!-- HACKER TERMINAL (Ctrl+~) -->
+<div id="terminal-overlay" onclick="closeTermBg(event)">
+  <div class="terminal-box">
+    <div class="term-titlebar">
+      <div class="term-dots"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div></div>
+      <div class="term-title">vraj@portfolio ~ bash</div>
+      <button class="term-close-btn" onclick="closeTerm()">✕ ESC</button>
+    </div>
+    <div class="term-output" id="term-output">
+      <div class="term-line"><span class="tc-green">vraj@portfolio</span><span class="tc-muted">:~$</span> <span style="color:#e8eef8">Welcome to Vraj Portfolio Terminal v2.0</span></div>
+      <div class="term-line tc-muted">Type 'help' for available commands.</div>
+    </div>
+    <div class="term-inp-row">
+      <span class="term-prompt">vraj@portfolio:~$&nbsp;</span>
+      <input class="term-inp" id="term-inp" placeholder="Type a command..." onkeydown="handleTermInput(event)">
+    </div>
+    <div class="term-hint">help · about · skills · projects · achievements · contact · resume · clear · exit</div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
