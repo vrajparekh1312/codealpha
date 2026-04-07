@@ -8,7 +8,7 @@ The website includes advanced UI features such as 3D effects, animated backgroun
 🚀 Live Demo
 
 🔗 Website:
-https://vrajparekh1312.github.io/
+[https://vrajparekh1312.github.io/](https://vrajparekh1312.github.io/CodeAlpha_Portfolio/)
 
 ✨ Features
 🎨 Modern UI/UX
