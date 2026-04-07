@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MELO — Music Player</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo"><div class="logo-dot"></div>MELO</div>
+    <div class="header-right">
+      <span class="kb-hint" id="kbHintBtn" title="Toggle keyboard shortcuts">⌨ Shortcuts</span>
+      <span class="track-counter" id="trackCounter">— tracks</span>
+    </div>
+  </header>
+
+  <!-- PLAYER -->
+  <div class="player-panel">
+
+    <div class="cover-stage" id="coverStage">
+      <img id="coverImg" src="" alt="Album Art">
+      <div class="now-pill"><span class="dot"></span>NOW PLAYING</div>
+    </div>
+
+    <div id="errorBox"></div>
+
+    <div class="song-info">
+      <div class="song-title" id="songTitle">Select a track</div>
+      <div class="song-sub">
+        <span class="song-artist" id="songArtist">—</span>
+        <span class="song-year" id="songYear"></span>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+        <input type="range" id="progress" min="0" max="100" value="0">
+      </div>
+      <div class="time-row">
+        <span id="curTime">0:00</span>
+        <span id="durTime">0:00</span>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <button class="ctrl" id="shuffleBtn" title="Shuffle (S)">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M16 3h5v5h-2V6.41l-6.29 6.3-1.42-1.42L17.59 5H16V3zM4 7h6v2H4V7zm0 8h6v2H4v-2zm15 1.59V16h2v5h-5v-2h1.59l-6.3-6.29 1.42-1.42L19 16.59z"/></svg>
+      </button>
+      <button class="ctrl" id="prevBtn" title="Previous (←)">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+      </button>
+      <button class="play-ctrl" id="playBtn" title="Play/Pause (Space)">
+        <svg id="iconPlay" width="26" height="26" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="iconPause" width="26" height="26" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+      </button>
+      <button class="ctrl" id="nextBtn" title="Next (→)">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2-8.14L15.25 12 8 16.14V9.86zM16 6h2v12h-2z"/></svg>
+      </button>
+      <button class="ctrl" id="repeatBtn" title="Repeat (R)">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M7 7h10V4l4 4-4 4V9H7V7zm10 10H7v3l-4-4 4-4v3h10v2z"/></svg>
+      </button>
+    </div>
+
+    <div class="vol-row">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      <input type="range" class="vol-slider" id="volume" min="0" max="1" step="0.01" value="0.7">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/></svg>
+    </div>
+
+  </div>
+
+  <!-- PLAYLIST PANEL -->
+  <div class="playlist-panel">
+    <div class="panel-head">
+      <div class="panel-title">Playlist</div>
+      <div class="panel-count" id="panelCount">0 tracks</div>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" id="searchInput" placeholder="Search tracks or artists…">
+    </div>
+
+    <div class="filter-tabs">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="fav">❤ Liked</button>
+      <button class="tab" data-filter="recent">🕐 Recent</button>
+    </div>
+
+    <!-- Recently Played -->
+    <div class="recent-section" id="recentSection" style="display:none">
+      <div class="recent-label">Recently Played</div>
+      <div class="recent-chips" id="recentChips"></div>
+    </div>
+
+    <div class="playlist-scroll" id="playlist"></div>
+  </div>
+
+</div>
+
+<!-- Mini Player -->
+<div class="mini-player" id="miniPlayer">
+  <div class="mini-progress" id="miniProgress"></div>
+  <img class="mini-cover" id="miniCover" src="" alt="">
+  <div class="mini-info">
+    <div class="mini-title" id="miniTitle">—</div>
+    <div class="mini-artist" id="miniArtist">—</div>
+  </div>
+  <div class="mini-controls">
+    <button class="mini-btn" id="miniPrev">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+    </button>
+    <button class="mini-btn" id="miniPlay">
+      <svg id="miniIconPlay" width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="miniIconPause" width="18" height="18" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+    </button>
+    <button class="mini-btn" id="miniNext">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2-8.14L15.25 12 8 16.14V9.86zM16 6h2v12h-2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Keyboard shortcut tooltip -->
+<div class="kb-tooltip" id="kbTooltip">
+  <div><kbd>Space</kbd> Play / Pause</div>
+  <div><kbd>→</kbd> Next song</div>
+  <div><kbd>←</kbd> Previous song</div>
+  <div><kbd>↑</kbd> Volume up</div>
+  <div><kbd>↓</kbd> Volume down</div>
+  <div><kbd>S</kbd> Toggle shuffle</div>
+  <div><kbd>R</kbd> Toggle repeat</div>
+</div>
+
+<audio id="audio"></audio>
+
+<!-- songs.js must come BEFORE script.js so the songs array is available -->
+<script src="songs.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
