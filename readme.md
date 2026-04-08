@@ -38,8 +38,8 @@ A modern web music player with smooth UI and controls.
 - Interactive UI
 - Responsive design
 
-🔗 Live Demo: https://your-live-link.com  
-🔗 GitHub: https://github.com/your-username/MELO  
+🔗 LiveDemo:
+https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/
 
 ---
 
