@@ -158,14 +158,17 @@ CODEALPHA_MUSICPLAYER/
 ├── script.js      # Player logic & interactivity
 ├── songs.js       # Song data array
 └── README.md      # This file
+
 ⚙️ Installation & Setup
 Follow these steps to run the project locally:
 1️⃣ Clone the Repository
 Bash
 git clone https://github.com/vrajparekh1312/melo-music-player.git
+
 2️⃣ Navigate to the Project Folder
 Bash
 cd CODEALPHA_MUSICPLAYER
+
 3️⃣ Run the Music Player
 Open the main file in your browser:
 
@@ -183,8 +186,9 @@ Microsoft Edge
 Mozilla Firefox
 Safari
 
-🌐 Live Website
-🔗 https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/⁠
+🌐 Live Website:
+
+https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/
 
 # 📸 Screenshots
 
