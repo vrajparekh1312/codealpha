@@ -182,7 +182,7 @@ Microsoft Edge
 Mozilla Firefox
 Safari
 🌐 Live Website
-🔗 https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/⁠�
+🔗 https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/⁠
 
 # 📸 Screenshots
 
