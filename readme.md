@@ -23,8 +23,7 @@ A simple and responsive calculator built using JavaScript.
 - Clean and minimal UI
 - Fast calculations
 
-🔗 Live Demo: https://your-live-link.com  
-🔗 GitHub: https://github.com/your-username/CodeAlpha_Calculator  
+🔗 Live Demo: https://vrajparekh1312.github.io/CodeAlpha_Calculator/
 
 ---
 
