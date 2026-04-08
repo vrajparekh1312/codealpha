@@ -175,12 +175,14 @@ Steps:
 Open the folder in VS Code
 Right-click on index.html
 Click "Open with Live Server"
+
 🌐 Browser Compatibility
 This music player works in modern browsers:
 Google Chrome
 Microsoft Edge
 Mozilla Firefox
 Safari
+
 🌐 Live Website
 🔗 https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/⁠
 
