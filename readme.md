@@ -54,6 +54,9 @@ A personal portfolio website to showcase projects and skills.
 - Responsive design
 - Modern UI/UX
 
+🌍 Visit Website:
+👉 https://vrajparekh1312.github.io/CodeAlpha_Portfolio/
+
 ---
 
 ## 🛠️ Technologies Used
