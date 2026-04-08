@@ -146,54 +146,43 @@ No external frameworks were used.
 
 ---
 📂 Project Structure
-
 The project follows a clean and organized structure:
 
 CODEALPHA_MUSICPLAYER/
 │
-├── images/          # Album art (.jpg)
-├── music/           # Audio files (.mp3)
+├── images/        # Album art (.jpg)
+├── music/         # Audio files (.mp3)
 │
-├── index.html       # Main HTML structure
-├── style.css        # All styles & animations
-├── script.js        # Player logic & interactivity
-├── songs.js         # Song data array
-└── readme.md        # This file
-
-⚙ Installation & Setup
-
-Follow these steps to run the project locally.
-
+├── index.html     # Main HTML structure
+├── style.css      # All styles & animations
+├── script.js      # Player logic & interactivity
+├── songs.js       # Song data array
+└── README.md      # This file
+⚙️ Installation & Setup
+Follow these steps to run the project locally:
 1️⃣ Clone the Repository
+Bash
 git clone https://github.com/vrajparekh1312/melo-music-player.git
 2️⃣ Navigate to the Project Folder
+Bash
 cd CODEALPHA_MUSICPLAYER
 3️⃣ Run the Music Player
-
 Open the main file in your browser:
 
 index.html
-
-OR run it using Live Server in VS Code:
-
+OR run using Live Server in VS Code:
 Steps:
-
 Open the folder in VS Code
-Right click index.html
-Click Open with Live Server
-
+Right-click on index.html
+Click "Open with Live Server"
 🌐 Browser Compatibility
-
 This music player works in modern browsers:
-
 Google Chrome
 Microsoft Edge
 Mozilla Firefox
 Safari
-
-🌐 Live Website:
-
-https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/
+🌐 Live Website
+🔗 https://vrajparekh1312.github.io/CodeAlpha_MusicPlayer/⁠�
 
 # 📸 Screenshots
 
