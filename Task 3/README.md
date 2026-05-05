@@ -7,7 +7,7 @@
 ## 🔗 Live Demo
 
 🌍 **Visit Website:**  
-👉 https://vrajparekh1312.github.io/CodeAlpha_Portfolio/
+👉 [https://vrajparekh1312.github.io/CodeAlpha_Portfolio/](https://vrajparekh.tech/)
 
 ---
 
