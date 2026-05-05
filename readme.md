@@ -55,7 +55,7 @@ A personal portfolio website to showcase projects and skills.
 - Modern UI/UX
 
 🌍 Visit Website:
-👉 https://vrajparekh1312.github.io/CodeAlpha_Portfolio/
+👉 [https://vrajparekh1312.github.io/CodeAlpha_Portfolio/](https://vrajparekh.tech/)
 
 ---
 
